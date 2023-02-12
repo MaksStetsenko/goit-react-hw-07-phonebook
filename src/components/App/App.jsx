@@ -1,9 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { getContacts } from 'redux/selectors';
+import {
+  getContacts,
+  sellectError,
+  sellectFilteredContacts,
+  sellectIsLoading,
+  sellectIsPhonebookEmpty,
+} from 'redux/selectors';
 
-import { useFilteredContacts } from 'components/hooks/useFileredContacts';
 import { message } from 'components/settings';
 import { Box } from 'components/Box';
 import Section from 'components/Section';
@@ -13,15 +18,20 @@ import ContactList from 'components/ContactList';
 import Notification from 'components/Notification';
 
 import { AppStyled, AppTitleStyled } from './App.styled';
+import { fetchContacts } from 'redux/contacts/contactsOperations';
 
 export const App = () => {
-  const { contacts } = useSelector(getContacts);
-  const filteredContacts = useFilteredContacts();
-
+  const dispatch = useDispatch();
+  const isLoading = useSelector(sellectIsLoading);
+  const error = useSelector(sellectError);
+  const filteredContacts = useSelector(sellectFilteredContacts);
+  const isPhonebookEmpty = useSelector(sellectIsPhonebookEmpty);
+  const isFilteredContactsEmpty = filteredContacts.length === 0;
   const { isEmptyBook, noMatches } = message;
 
-  const isPhonebookEmpty = contacts.length === 0;
-  const isFilteredContactsEmpty = filteredContacts.length === 0;
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   //=========== render ==============================================
 
@@ -42,21 +52,27 @@ export const App = () => {
           <ContactForm />
         </Section>
 
-        <Section title="Contacts">
-          {isPhonebookEmpty ? (
-            <Notification message={isEmptyBook} />
-          ) : (
-            <>
-              <Filter />
+        <Box display="block" height="20px" textAlign="center" color="red">
+          {isLoading && <div>Loading</div>}
+        </Box>
 
-              {isFilteredContactsEmpty ? (
-                <Notification message={noMatches} />
-              ) : (
-                <ContactList />
-              )}
-            </>
-          )}
-        </Section>
+        {!error && (
+          <Section title="Contacts">
+            {isPhonebookEmpty ? (
+              <Notification message={isEmptyBook} />
+            ) : (
+              <>
+                <Filter />
+
+                {isFilteredContactsEmpty ? (
+                  <Notification message={noMatches} />
+                ) : (
+                  <ContactList />
+                )}
+              </>
+            )}
+          </Section>
+        )}
       </AppStyled>
     </Box>
   );

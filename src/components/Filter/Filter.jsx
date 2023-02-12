@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { inputFilterReducer, clearFilterReducer } from 'redux/filterSlice';
-import { getFilter } from 'redux/selectors';
+import { sellectFilter } from 'redux/selectors';
 
 import { Box } from 'components/Box';
 
@@ -13,7 +13,7 @@ import { LabelStyled, InputStyled, ButtonStyled } from './Filter.styled';
 const Filter = () => {
   const dispatch = useDispatch();
 
-  const filter = useSelector(getFilter);
+  const filter = useSelector(sellectFilter);
 
   const handleChangeFilter = event => {
     dispatch(inputFilterReducer(event.currentTarget.value));

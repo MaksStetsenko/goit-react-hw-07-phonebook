@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import Contact from 'components/Contact';
-
-import { useFilteredContacts } from 'components/hooks/useFileredContacts';
+import { sellectFilteredContacts } from 'redux/selectors';
 
 const ContactList = () => {
-  const filteredContacts = useFilteredContacts();
+  const filteredContacts = useSelector(sellectFilteredContacts);
 
   return (
     <ul>

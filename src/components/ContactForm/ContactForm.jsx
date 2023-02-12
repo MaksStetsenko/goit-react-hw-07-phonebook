@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 
-import { addContactReducer } from 'redux/contactsSlice';
-import { getContacts } from 'redux/selectors';
+import { sellectContacts } from 'redux/selectors';
+import { addContact } from 'redux/contacts/contactsOperations';
 
 import { initialValue, validationString, message } from 'components/settings';
 import Notification from 'components/Notification';
@@ -20,10 +20,10 @@ import {
 
 const PhonebookEditor = () => {
   const dispatch = useDispatch();
-  const { contacts } = useSelector(getContacts);
+  const items = useSelector(sellectContacts);
 
   const isContactExist = abonentName => {
-    return contacts.find(({ name }) => name === abonentName);
+    return items.find(({ name }) => name === abonentName);
   };
 
   const handleSubmit = ({ name, phone }, { resetForm }) => {
@@ -32,7 +32,7 @@ const PhonebookEditor = () => {
       return;
     }
 
-    dispatch(addContactReducer({ name, phone }));
+    dispatch(addContact({ name, phone }));
 
     resetForm();
   };

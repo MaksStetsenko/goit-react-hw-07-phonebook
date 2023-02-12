@@ -6,10 +6,10 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState: initFilter,
   reducers: {
-    inputFilterReducer(state, action) {
-      return action.payload;
+    inputFilterReducer(_, { payload }) {
+      return payload;
     },
-    clearFilterReducer(state, action) {
+    clearFilterReducer() {
       return '';
     },
   },

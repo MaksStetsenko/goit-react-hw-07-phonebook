@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { deleteContactReducer } from 'redux/contactsSlice';
-import { getContacts } from 'redux/selectors';
+import { sellectContacts } from 'redux/selectors';
 import { clearFilterReducer } from 'redux/filterSlice';
+import { deleteContact } from 'redux/contacts/contactsOperations';
 
 import { MdDelete } from 'react-icons/md';
 
@@ -15,10 +15,10 @@ import { ContactButtonStyled } from './Contact.styled';
 const Contact = ({ contactId, name, phone }) => {
   const dispatch = useDispatch();
 
-  const { contacts } = useSelector(getContacts);
+  const contacts = useSelector(sellectContacts);
 
-  const deleteContact = contactId => {
-    dispatch(deleteContactReducer(contactId));
+  const deleteHandler = contactId => {
+    dispatch(deleteContact(contactId));
 
     if (contacts.length === 1) {
       dispatch(clearFilterReducer());
@@ -30,7 +30,7 @@ const Contact = ({ contactId, name, phone }) => {
       {name}: {phone}
       <ContactButtonStyled
         type="button"
-        onClick={() => deleteContact(contactId)}
+        onClick={() => deleteHandler(contactId)}
       >
         <MdDelete size="30" />
       </ContactButtonStyled>
